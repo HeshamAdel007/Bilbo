@@ -1,6 +1,8 @@
 <?php
 namespace Bilbo\Http;
 
+use Bilbo\View\View;
+
 class Route
 {
     protected Request $request;
@@ -31,9 +33,14 @@ class Route
         $action = self::$routes[$method][$path] ?? false;
 
         // If Action Not Exists
-        if (!$action) {
-            return;
+        // if (!$action) {
+        //     return;
+        // }
+        if (!array_key_exists($path, self::$routes[$method])) {
+            $this->response->setStatusCode(404);
+            View::makeError('404');
         }
+        
         // If Action Is A Callable
         if (is_callable($action)) {
             call_user_func_array($action, []);

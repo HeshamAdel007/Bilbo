@@ -5,6 +5,6 @@ class HomeController
 {
     public function index()
     {
-        return 'hello';
+        return View('home');
     }
 }
