@@ -1,7 +1,9 @@
 <?php
 
 use Bilbo\View\View;
+use Bilbo\Application;
 
+// Env File
 if (!function_exists('env')) {
     function env($key, $default = null)
     {
@@ -9,8 +11,6 @@ if (!function_exists('env')) {
         return $_ENV[$key] ?? value($default);
     }
 }
-
-
 if (!function_exists('value')) {
     function value($value)
     {
@@ -19,6 +19,7 @@ if (!function_exists('value')) {
     }
 }
 
+// Get Path
 if (!function_exists('base_path')) {
     function base_path()
     {
@@ -27,6 +28,7 @@ if (!function_exists('base_path')) {
     }
 }
 
+// Path View File
 if (!function_exists('view_path')) {
     function view_path()
     {
@@ -34,10 +36,22 @@ if (!function_exists('view_path')) {
     }
 }
 
-
+// View()
 if (!function_exists('view')) {
     function view($view, $params = [])
     {
         echo View::make($view, $params);
+    }
+}
+
+// App
+if (!function_exists('app')) {
+    function app()
+    {
+        static $instance = null;
+        if (!$instance) {
+            $instance = new Application();
+        }
+        return $instance;
     }
 }
