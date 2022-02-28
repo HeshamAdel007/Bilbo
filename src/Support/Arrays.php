@@ -22,7 +22,7 @@ class Arrays
     } // End Accessible
 
     // Check If Value Exists
-    public static function exists($array, $key)
+    public static function exists($array, $key): bool
     {
         if ($array instanceof ArrayAccess) {
             return $array->offsetExists($key);
@@ -138,7 +138,7 @@ class Arrays
     {
         static::forget($array, $keys);
         return $array;
-    }
+    } // End Of except
 
     // Transfer Array From Multi Diminution[[[[]]]]  To One []
     public static function flatten($array, $depth = INF)
@@ -158,7 +158,7 @@ class Arrays
             }
         }
         return $result;
-    }
+    } // End Of flatten
 
     public static function get($array, $key, $default = null)
     {
@@ -185,7 +185,7 @@ class Arrays
             }
         }
         return $array;
-    }
+    } // End Of Get
 
     public static function set(&$array, $key, $value)
     {
@@ -205,11 +205,11 @@ class Arrays
         }
         $array[array_shift($keys)] = $value;
         return $array;
-    }
+    } // End Of set
 
 
     public static function unset($array, $key)
     {
         static::set($array, $key, null);
-    }
+    } // End Of unset
 } // End Of Class
