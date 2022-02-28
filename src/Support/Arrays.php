@@ -13,7 +13,7 @@ class Arrays
         return array_intersect_key($array, array_flip((array) $keys));
     } // End Only
 
-    // Chack If Array Is Accessible OR No
+    // Check If Array Is Accessible OR No
     public static function accessible($value)
     {
         // If Accessible Will Return Array
@@ -21,7 +21,7 @@ class Arrays
         return is_array($value) || $value instanceof ArrayAccess;
     } // End Accessible
 
-    // Chack If Value Exists
+    // Check If Value Exists
     public static function exists($array, $key)
     {
         if ($array instanceof ArrayAccess) {
@@ -30,7 +30,7 @@ class Arrays
         return array_key_exists($key, $array);
     } // End Of Exists
 
-    // Chack If Array Has This Key | Value
+    // Check If Array Has This Key | Value
     public static function has($array, $keys)
     {
         // If Key Null
@@ -120,7 +120,7 @@ class Arrays
             $parts = explode('.', $key);
             // Clean Up Before Each Pass
             $array = &$original;
-            // Chack Count
+            // Check Count
             while (count($parts) > 1) {
                 $part = array_shift($parts);
                 if (isset($array[$part]) && is_array($array[$part])) {
@@ -132,4 +132,84 @@ class Arrays
             unset($array[array_shift($parts)]);
         }
     } // End Of Forget
+
+    // Gey All Array Except This Key
+    public static function except($array, $keys)
+    {
+        static::forget($array, $keys);
+        return $array;
+    }
+
+    // Transfer Array From Multi Diminution[[[[]]]]  To One []
+    public static function flatten($array, $depth = INF)
+    {
+        $result = [];
+        foreach ($array as $item) {
+            // Check If Array
+            // This Break
+            if (!is_array($item)) {
+                // Push $item To Result
+                $result[] = $item;
+            // Check Depth = 1
+            } elseif ($depth === 1) {
+                $result = array_merge($result, array_values($item));
+            } else {
+                $result = array_merge($result, static::flatten($item, $depth - 1));
+            }
+        }
+        return $result;
+    }
+
+    public static function get($array, $key, $default = null)
+    {
+        //Check If Array IS Not Accessible
+        if (!static::accessible($array)) {
+            return value($default);
+        }
+        //Check If Array IS Null
+        if (is_null($key)) {
+            return $array;
+        }
+        //Check If Array IS Exist
+        if (static::exists($array, $key)) {
+            return $array[$key];
+        }
+        if (mb_strpos($key, '.') === false) {
+            return $array[$key] ?? value($default);
+        }
+        foreach (explode('.', $key) as $segment) {
+            if (static::accessible($array) && static::exists($array, $segment)) {
+                $array = $array[$segment];
+            } else {
+                return ($default);
+            }
+        }
+        return $array;
+    }
+
+    public static function set(&$array, $key, $value)
+    {
+        // Check If Is Null Key
+        if (is_null($key)) {
+            return $array = $value;
+        }
+        // Explodes Key
+        $keys = explode('.', $key);
+        while (count($keys) > 1) {
+            // Get First Element In Array
+            $key = array_shift($keys);
+            if (!isset($array[$key]) || !is_array($array[$key])) {
+                $array[$key] = [];
+            }
+            $array = &$array[$key];
+        }
+        $array[array_shift($keys)] = $value;
+        return $array;
+    }
+
+
+    public static function unset($array, $key)
+    {
+        static::set($array, $key, null);
+    }
 } // End Of Class
