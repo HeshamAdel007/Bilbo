@@ -7,8 +7,8 @@ use Bilbo\Database\DB;
 use Bilbo\Http\Request;
 use Bilbo\Http\Response;
 use Bilbo\Support\Config;
+use Bilbo\Support\Session;
 use Bilbo\Database\Managers\MySQLManager;
-use Bilbo\Database\Managers\SQLiteManager;
 
 class Application
 {
@@ -17,6 +17,7 @@ class Application
     protected Response $response;
     protected Config $config;
     protected DB $db;
+    protected Session $session;
 
 
     public function __construct()
@@ -26,6 +27,7 @@ class Application
         $this->route  = new Route($this->request, $this->response);
         $this->config = new Config($this->loadConfigurations());
         $this->db = new DB($this->getDatabaseDriver());
+        $this->session = new Session;
     }
 
 
