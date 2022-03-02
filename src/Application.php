@@ -3,9 +3,12 @@
 namespace Bilbo;
 
 use Bilbo\Http\Route;
+use Bilbo\Database\DB;
 use Bilbo\Http\Request;
 use Bilbo\Http\Response;
 use Bilbo\Support\Config;
+use Bilbo\Database\Managers\MySQLManager;
+use Bilbo\Database\Managers\SQLiteManager;
 
 class Application
 {
@@ -13,6 +16,7 @@ class Application
     protected Request $request;
     protected Response $response;
     protected Config $config;
+    protected DB $db;
 
 
     public function __construct()
@@ -21,6 +25,7 @@ class Application
         $this->response = new Response;
         $this->route  = new Route($this->request, $this->response);
         $this->config = new Config($this->loadConfigurations());
+        $this->db = new DB($this->getDatabaseDriver());
     }
 
 
@@ -36,11 +41,21 @@ class Application
             $filename = explode('.', $file)[0]; // Get First Element
             yield $filename => require config_path() . $file;
         }
-    }
+    } // End Of loadConfigurations
+
+
+    protected function getDatabaseDriver()
+    {
+        return match (env('DB_DRIVER')) {
+            'mysql' => new MySQLManager,
+            default => new MySQLManager
+        };
+    } // End Of getDatabaseDriver
 
     // Run App
     public function run()
     {
+        $this->db->init();
         $this->route->resolve();
     }
 
@@ -51,4 +66,4 @@ class Application
             return $this->$name;
         }
     }
-}
+} // ENd Of Class

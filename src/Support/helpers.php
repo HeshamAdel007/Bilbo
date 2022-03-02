@@ -2,6 +2,7 @@
 
 use Bilbo\View\View;
 use Bilbo\Application;
+use Bilbo\Support\Hash;
 use Bilbo\Validation\Validator;
 
 // Env File
@@ -84,5 +85,30 @@ if (!function_exists('validator')) {
     function validator()
     {
         return (new Validator());
+    }
+}
+
+// Bcrypt
+if (!function_exists('bcrypt')) {
+    function bcrypt($data)
+    {
+        return Hash::make($data);
+    }
+}
+
+// Database Path
+if (!function_exists('database_path')) {
+    function database_path()
+    {
+        return base_path() . 'database/';
+    }
+}
+
+// Class Name
+if (!function_exists('class_basename')) {
+    function class_basename($class)
+    {
+        $class = is_object($class) ? get_class($class) : $class;
+        return basename(str_replace('\\', '/', $class));
     }
 }
