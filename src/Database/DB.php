@@ -16,7 +16,10 @@ class DB
 
     public function init()
     {
-        ConnectsTo::connect($this->manager);
+        // ConnectsTo::connect($this->manager);
+        (new class {
+            use ConnectsTo;
+        })::connect($this->manager);
     }// End Of init
 
     protected function raw(string $query, $value = [])

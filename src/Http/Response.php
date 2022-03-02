@@ -7,4 +7,10 @@ class Response
     {
         http_response_code($code);
     }
+
+    public function back()
+    {
+        header('Location:' . $_SERVER['HTTP_REFERER']);
+        return $this;
+    }
 }

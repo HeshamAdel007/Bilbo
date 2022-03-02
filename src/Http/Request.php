@@ -1,6 +1,9 @@
 <?php
 namespace Bilbo\Http;
 
+use Bilbo\Support\Str;
+use Bilbo\Support\Arrays;
+
 class Request
 {
     public function path()
@@ -11,6 +14,21 @@ class Request
 
     public function method()
     {
-        return strtolower($_SERVER['REQUEST_METHOD']);
+        return Str::lower($_SERVER['REQUEST_METHOD']);
+    }
+
+    public function all()
+    {
+        return $_REQUEST;
+    }
+
+    public function only($keys)
+    {
+        return Arrays::only($this->all(), $keys);
+    }
+
+    public function get($key)
+    {
+        return Arrays::get($this->all(), $key);
     }
 }
