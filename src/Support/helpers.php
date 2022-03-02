@@ -2,6 +2,7 @@
 
 use Bilbo\View\View;
 use Bilbo\Application;
+use Bilbo\Validation\Validator;
 
 // Env File
 if (!function_exists('env')) {
@@ -14,7 +15,7 @@ if (!function_exists('env')) {
 if (!function_exists('value')) {
     function value($value)
     {
-        // If Value Is instanceof Closure Make Invoic Else Return Value
+        // If Value Is instanceof Closure Make Invoke Else Return Value
         return $value instanceof Closure ? $value() : $value;
     }
 }
@@ -23,7 +24,7 @@ if (!function_exists('value')) {
 if (!function_exists('base_path')) {
     function base_path()
     {
-        // Will Return Carrent Dir & Back One Dir
+        // Will Return Current Dir & Back One Dir
         return dirname(__DIR__) . '/../';
     }
 }
@@ -75,5 +76,13 @@ if (!function_exists('config')) {
             return app()->config->set($key);
         }
         return app()->config->get($key, $default);
+    }
+}
+
+// Validations
+if (!function_exists('validator')) {
+    function validator()
+    {
+        return (new Validator());
     }
 }

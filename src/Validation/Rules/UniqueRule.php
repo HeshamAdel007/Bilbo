@@ -4,6 +4,9 @@ namespace Bilbo\Validation\Rules;
 
 use Bilbo\Validation\Rules\Contract\Rule;
 
+// $valid = [
+//     'name' => 'unique:user:name'
+// ]
 class UniqueRule implements Rule
 {
     protected $table;
@@ -11,8 +14,8 @@ class UniqueRule implements Rule
 
     public function __construct($table, $column)
     {
-        $this->table = $table;
-        $this->column = $column;
+        $this->table = $table; // Table Name
+        $this->column = $column; // Column name
     }
 
     public function apply($field, $value, $data =[])
